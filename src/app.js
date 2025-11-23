@@ -4,38 +4,79 @@ const profilePhotoPath = process.env.PUBLIC_URL + '/Nizar.jpg';
 
 const artifacts = [
   {
-  title: "AI & ML Timeline",
-  description: "Created a detailed timeline showcasing key AI and ML milestones, demonstrating my understanding of AI evolution and its relevance to my studies.",
-  link: "https://chatgpt.com/canvas/shared/6904ec085d408191a5bc2dd34016d953",
-  reflection: "This timeline illustrates my ability to organize complex information, research skills, and contextual understanding of AI for professional portfolio purposes."
+    title: "AI & Machine Learning Timeline",
+    artifactType: "Interactive Canvas Timeline",
+    introduction: "A visual timeline highlighting the major milestones in AI and ML from the 1950s to recent advancements.",
+    description: "This timeline presents key historical developments, periods of AI winter, and breakthroughs in deep learning and cloud computing. It focuses on major figures, companies, and innovations shaping AI.",
+    objective: "To demonstrate understanding of AI’s historical context and major advancements while creating an engaging, chronological visual representation.",
+    process: "Researched AI milestones, AI winters, and recent achievements; selected the most impactful events; created a digital timeline using ChatGPT/Canvas with clear descriptions and visuals.",
+    tools: "ChatGPT Canvas, online research",
+    valueProposition: "Shows ability to synthesize complex AI history and present it visually for educational or professional audiences.",
+    uniqueValue: "Provides an interactive, chronological overview combining historical context with recent AI achievements.",
+    relevance: "Highlights understanding of AI/ML concepts, history, and their evolution, which is essential for AI professionals.",
+    references: "Credible AI history articles, research papers, and industry sources",
+    link: "https://chatgpt.com/canvas/shared/6904ec085d408191a5bc2dd34016d953",
+    pdf: null
   },
   {
-    title: "Machine Learning vs. Deep Learning Analysis",
-    description:
-      "A structured comparison exploring the differences between Machine Learning and Deep Learning, focusing on algorithms, architectures, applications, and practical scalability in real-world environments.",
-    reflection:
-      "This artifact demonstrates my ability to critically analyze AI concepts and translate them into meaningful insights. By comparing ML and DL, I learned how to evaluate model complexity, data requirements, and appropriate use cases. This strengthened my technical reasoning and helps me make informed decisions about selecting the right approach in future projects."
+    title: "Machine Learning vs Deep Learning Comparison",
+    artifactType: "PDF Document",
+    introduction: "A comparative analysis illustrating when to use machine learning versus deep learning through real-world examples.",
+    description: "Two examples demonstrate ML and DL applications: spam email detection (ML) and tumor detection in medical imaging (DL). Includes explanation of why each method is suitable or unsuitable for the problem.",
+    objective: "To critically evaluate differences between ML and DL and understand their application contexts.",
+    process: "Reviewed course materials, selected real-world examples, analyzed each method’s advantages and limitations, and documented the findings in a clear, concise report.",
+    tools: "Microsoft Word (converted to PDF), course materials",
+    valueProposition: "Demonstrates ability to analyze AI techniques and choose the right approach for different problem types.",
+    uniqueValue: "Combines clear explanation, real-world examples, and practical reasoning to show mastery of ML and DL concepts.",
+    relevance: "Essential for AI/ML professionals to understand and select appropriate methodologies for structured vs unstructured data.",
+    references: "Course materials, AI textbooks and articles",
+    link: null,
+    pdf: "/artifacts/ML_vs_DL_Analysis.pdf"
   },
   {
-    title: "Deep Learning Implementation & Adaptation",
-    description:
-      "Hands-on implementation of neural network models, including experimentation with preprocessing, architecture tuning, and training optimization while addressing performance challenges.",
-    reflection:
-      "Working with neural networks allowed me to turn theory into real practice. I learned how to diagnose training issues, adjust hyperparameters, and manage data limitations. This artifact highlights my adaptability, problem-solving skills, and growing confidence in handling deep learning workflows — key abilities for advanced AI development."
+    title: "Adapting to Challenges in Leadership",
+    artifactType: "PDF Document",
+    introduction: "Reflection on personal leadership challenges and applying biblical examples to adapt effectively.",
+    description: "Describes current leadership challenges, such as balancing responsibilities and making tough decisions. Draws on Moses and Esther as examples of adaptive leadership.",
+    objective: "To develop skills in adaptive leadership and critical reflection on decision-making.",
+    process: "Identified real-world leadership challenges, analyzed biblical examples, reflected on personal strategies, and documented insights.",
+    tools: "Microsoft Word (converted to PDF), course materials",
+    valueProposition: "Demonstrates ability to reflect on leadership challenges and implement strategies for effective adaptation.",
+    uniqueValue: "Integrates personal experience with historical/biblical context to show growth in leadership skills.",
+    relevance: "Highlights critical thinking, adaptability, and decision-making skills relevant for professional and personal development.",
+    references: "Bible, course materials",
+    link: null,
+    pdf: "/artifacts/Adapting_to_Challenges.pdf"
   },
   {
-    title: "Secure Online Auction System (2023)",
-    description:
-      "A full-stack auction platform built with Spring Boot and React, featuring secure transactions, real-time bidding logic, and automated backend workflows.",
-    reflection:
-      "This project showcases my practical experience in full-stack web development, secure system design, and database integration. It reflects my ability to build real-world applications that balance performance, reliability, and user experience — skills that support my long-term goals in AI-driven software engineering."
+    title: "Clear Communication in Leadership",
+    artifactType: "PDF Document",
+    introduction: "Reflection on communication challenges and strategies to prevent confusion within teams.",
+    description: "Analyzes personal communication style, explores potential pitfalls, and proposes methods for ensuring clarity using biblical and professional examples.",
+    objective: "To improve leadership communication skills and prevent misunderstandings in professional settings.",
+    process: "Reflected on past experiences of confusion, studied course guidance, documented actionable strategies for clear communication, and prepared a professional artifact for portfolio.",
+    tools: "Microsoft Word (converted to PDF), course materials",
+    valueProposition: "Demonstrates awareness of effective communication and practical methods to enhance clarity in leadership contexts.",
+    uniqueValue: "Combines personal reflection with actionable strategies, showing ownership of learning and professional growth.",
+    relevance: "Essential skill for leadership and collaboration in any professional environment.",
+    references: "Course materials, Scripture references (optional)",
+    link: null,
+    pdf: "/artifacts/Clear_Communication.pdf"
   },
   {
     title: "Alumni Management Portal (2023)",
-    description:
-      "A microservices-based web application designed to support alumni interaction, event management, and data organization across distributed services.",
-    reflection:
-      "Through this project, I gained deeper experience in system architecture, API communication, and collaborative software development. This artifact highlights my technical versatility and my ability to design maintainable, scalable backend systems."
+    artifactType: "PDF Document",
+    introduction: "A microservices-based web application designed to support alumni interaction, event management, and data organization across distributed services.",
+    description: "Developed scalable services for alumni event management and database integration across distributed modules.",
+    objective: "To enhance my skills in system architecture, microservices, and collaborative software development.",
+    process: "Designed system architecture, implemented distributed services, tested API communication, and ensured data consistency.",
+    tools: "Java, Spring Boot, React, MySQL, Docker",
+    valueProposition: "Demonstrates my ability to build maintainable, scalable, and reliable backend systems.",
+    uniqueValue: "Microservices-based approach for flexible, distributed system management.",
+    relevance: "Relevant for enterprise-level software projects requiring modularity and scalability.",
+    references: "Internal development documentation.",
+    link: null,
+    pdf: "/artifacts/Alumni_Management_Portal.pdf"
   }
 ];
 
@@ -56,12 +97,10 @@ export default function App() {
       behavior: 'smooth'
     });
 
-    // Highlight effect without breaking fade-in
     element.classList.add('highlight');
     setTimeout(() => element.classList.remove('highlight'), 1200);
   };
 
-  // Fade-in sections when visible
   useEffect(() => {
     const sections = document.querySelectorAll('.section');
     const observer = new IntersectionObserver(entries => {
@@ -92,7 +131,7 @@ export default function App() {
         </ul>
       </nav>
 
-      {/* Home */}
+      {/* Sections */}
       <section id="home" className="section home">
         <img 
           src={profilePhotoPath} 
@@ -105,7 +144,6 @@ export default function App() {
       </section>
       <hr className="divider"/>
 
-      {/* About */}
       <section id="about" className="section">
         <h2>About Me</h2>
         <p>
@@ -116,7 +154,6 @@ export default function App() {
       </section>
       <hr className="divider"/>
 
-      {/* Experience */}
       <section id="experience" className="section">
         <h2>Experience</h2>
         <div className="experience-item">
@@ -145,7 +182,6 @@ export default function App() {
       </section>
       <hr className="divider"/>
 
-      {/* Education */}
       <section id="education" className="section">
         <h2>Education</h2>
         <div className="education-item">
@@ -159,7 +195,6 @@ export default function App() {
       </section>
       <hr className="divider"/>
 
-      {/* Skills */}
       <section id="skills" className="section">
         <h2>Skills & Technical Expertise</h2>
         <div className="skills-grid">
@@ -199,7 +234,6 @@ export default function App() {
       </section>
       <hr className="divider"/>
 
-      {/* Artifacts */}
       <section id="artifacts" className="section">
         <h2>Artifacts</h2>
         <div className="artifacts-grid">
@@ -216,27 +250,46 @@ export default function App() {
         <div className="modal-overlay" onClick={() => setSelectedArtifact(null)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <h2>{selectedArtifact.title}</h2>
+            <p><strong>Introduction:</strong> {selectedArtifact.introduction}</p>
             <p><strong>Description:</strong> {selectedArtifact.description}</p>
+            <p><strong>Objective:</strong> {selectedArtifact.objective}</p>
+            <p><strong>Process:</strong> {selectedArtifact.process}</p>
+            <p><strong>Tools:</strong> {selectedArtifact.tools}</p>
+            <p><strong>Value Proposition:</strong> {selectedArtifact.valueProposition}</p>
+            <p><strong>Unique Value:</strong> {selectedArtifact.uniqueValue}</p>
+            <p><strong>Relevance:</strong> {selectedArtifact.relevance}</p>
+            <p><strong>References:</strong> {selectedArtifact.references}</p>
+
             {selectedArtifact.link && (
               <p>
                 <a
-                 href={selectedArtifact.link}
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 className="text-blue-600 underline font-medium"
+                  href={selectedArtifact.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#82EFFF', textDecoration: 'underline', fontWeight: 500 }}
                 >
-                  AI Research & Development Timeline
+                  Open Timeline
                 </a>
               </p>
             )}
 
-            <p><strong>Reflection:</strong> {selectedArtifact.reflection}</p>
+            {selectedArtifact.pdf && (
+              <p>
+                <a
+                  href={selectedArtifact.pdf}
+                  download
+                  style={{ color: '#82EFFF', textDecoration: 'underline', fontWeight: 500 }}
+                >
+                  Download PDF
+                </a>
+              </p>
+            )}
+
             <button className="close-btn" onClick={() => setSelectedArtifact(null)}>Close</button>
           </div>
         </div>
       )}
 
-      {/* Contact */}
       <section id="contact" className="section">
         <h2>Contact</h2>
         <div className="contact-buttons">
