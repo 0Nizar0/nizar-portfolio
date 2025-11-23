@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/nizar-portfolio/static/css/main.8d9e566d.css",
-    "main.js": "/nizar-portfolio/static/js/main.66bc4584.js",
+    "main.js": "/nizar-portfolio/static/js/main.ff071754.js",
     "index.html": "/nizar-portfolio/index.html",
     "main.8d9e566d.css.map": "/nizar-portfolio/static/css/main.8d9e566d.css.map",
-    "main.66bc4584.js.map": "/nizar-portfolio/static/js/main.66bc4584.js.map"
+    "main.ff071754.js.map": "/nizar-portfolio/static/js/main.ff071754.js.map"
   },
   "entrypoints": [
     "static/css/main.8d9e566d.css",
-    "static/js/main.66bc4584.js"
+    "static/js/main.ff071754.js"
   ]
 }
