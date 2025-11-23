@@ -31,7 +31,7 @@ const artifacts = [
     relevance: "Essential for AI/ML professionals to understand and select appropriate methodologies for structured vs unstructured data.",
     references: "Course materials, AI textbooks and articles",
     link: null,
-    pdf: "/artifacts/ML_vs_DL_Analysis.pdf"
+    pdf: process.env.PUBLIC_URL + "/artifacts/ML_vs_DL_Analysis.pdf"
   },
   {
     title: "Adapting to Challenges in Leadership",
@@ -46,7 +46,7 @@ const artifacts = [
     relevance: "Highlights critical thinking, adaptability, and decision-making skills relevant for professional and personal development.",
     references: "Bible, course materials",
     link: null,
-    pdf: "/artifacts/Adapting_to_Challenges.pdf"
+    pdf: process.env.PUBLIC_URL + "/artifacts/Adapting_to_Challenges.pdf"
   },
   {
     title: "Clear Communication in Leadership",
@@ -61,7 +61,7 @@ const artifacts = [
     relevance: "Essential skill for leadership and collaboration in any professional environment.",
     references: "Course materials, Scripture references (optional)",
     link: null,
-    pdf: "/artifacts/Clear_Communication.pdf"
+    pdf: process.env.PUBLIC_URL + "/artifacts/Clear_Communication.pdf"
   },
   {
     title: "Alumni Management Portal (2023)",
@@ -76,7 +76,7 @@ const artifacts = [
     relevance: "Relevant for enterprise-level software projects requiring modularity and scalability.",
     references: "Internal development documentation.",
     link: null,
-    pdf: "/artifacts/Alumni_Management_Portal.pdf"
+    pdf: process.env.PUBLIC_URL + "/artifacts/Alumni_Management_Portal.pdf"
   }
 ];
 
