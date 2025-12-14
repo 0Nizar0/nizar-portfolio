@@ -64,19 +64,19 @@ const artifacts = [
     pdf: process.env.PUBLIC_URL + "/artifacts/Clear_Communication.pdf"
   },
   {
-    title: "Alumni Management Portal (2023)",
-    artifactType: "PDF Document",
-    introduction: "A microservices-based web application designed to support alumni interaction, event management, and data organization across distributed services.",
-    description: "Developed scalable services for alumni event management and database integration across distributed modules.",
-    objective: "To enhance my skills in system architecture, microservices, and collaborative software development.",
-    process: "Designed system architecture, implemented distributed services, tested API communication, and ensured data consistency.",
-    tools: "Java, Spring Boot, React, MySQL, Docker",
-    valueProposition: "Demonstrates my ability to build maintainable, scalable, and reliable backend systems.",
-    uniqueValue: "Microservices-based approach for flexible, distributed system management.",
-    relevance: "Relevant for enterprise-level software projects requiring modularity and scalability.",
-    references: "Internal development documentation.",
+    title: "Commercial Applications of AI",
+    artifactType: "Newsletter (PDF)",
+    introduction: "A professional newsletter analyzing how artificial intelligence is currently being applied across multiple industries.",
+    description: "This artifact explores real-world commercial AI applications in three industries, highlighting specific companies and products and explaining how AI is transforming business processes and decision-making.",
+    objective: "To demonstrate the ability to analyze practical AI use cases and clearly communicate their business impact to a non-technical audience.",
+    process: "Researched recent commercial AI developments, selected representative industries, analyzed business use cases, and structured the findings into a polished newsletter format.",
+    tools: "Course materials, online research, Microsoft Word (converted to PDF)",
+    valueProposition: "Shows applied understanding of AI in business environments and the ability to present technical concepts in a professional, accessible manner.",
+    uniqueValue: "Focuses on current, real-world AI adoption rather than theoretical models, emphasizing business relevance.",
+    relevance: "Demonstrates applied AI knowledge, industry awareness, and professional communication skills essential for AI and ML roles.",
+    references: "Industry reports, company documentation, and course materials",
     link: null,
-    pdf: process.env.PUBLIC_URL + "/artifacts/Alumni_Management_Portal.pdf"
+    pdf: process.env.PUBLIC_URL + "/artifacts/Commercial_Applications_of_AI.pdf"
   }
 ];
 
