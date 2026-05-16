@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Machine Learning Algorithm Types | Nizar Muala</title>
+<style>
+  /* ===== MATCH PORTFOLIO STYLE EXACTLY ===== */
+  body, html {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(160deg, #1e1e1e 0%, #111 100%);
+    color: #e0e0e0;
+    scroll-behavior: smooth;
+    min-height: 100vh;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    position: sticky;
+    top: 0;
+    background-color: #111;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 2rem;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+  }
+
+  .nav-logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #00c8c8;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-back {
+    background: none;
+    border: 1px solid #00c8c8;
+    color: #e0e0e0;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .nav-back:hover {
+    background-color: #00c8c8;
+    color: #111;
+    transform: translateY(-2px);
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .container {
+    max-width: 960px;
+    margin: auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .header-label {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #00c8c8;
+    margin-bottom: 0.8rem;
+  }
+
+  .header h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+    color: #e0e0e0;
+  }
+
+  .header h1 span {
+    color: #00c8c8;
+  }
+
+  .header p {
+    color: #aaa;
+    font-size: 1rem;
+    max-width: 580px;
+    margin: 0.6rem auto 0;
+    line-height: 1.6;
+  }
+
+  hr.divider {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 1.5rem 0 2.5rem;
+    opacity: 0.6;
+  }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.2rem 2rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .legend-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .legend-label {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #aaa;
+  }
+
+  .legend-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sep {
+    width: 1px;
+    height: 22px;
+    background: #333;
+  }
+
+  /* ===== DOMAIN SUMMARY ===== */
+  .domain-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s 0.15s ease both;
+  }
+
+  .domain-card {
+    background-color: #222;
+    border-radius: 8px;
+    padding: 1.1rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    border-top: 2px solid transparent;
+  }
+
+  .domain-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  }
+
+  .domain-card.tabular  { border-top-color: #00c8c8; }
+  .domain-card.vision   { border-top-color: #c84070; }
+  .domain-card.nlp      { border-top-color: #4070c8; }
+  .domain-card.genai    { border-top-color: #c87840; }
+
+  .domain-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .domain-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 0.3rem;
+  }
+
+  .domain-desc {
+    font-size: 0.75rem;
+    color: #888;
+    line-height: 1.4;
+  }
+
+  /* ===== ALGORITHM GRID ===== */
+  .algo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+
+  /* ===== ALGORITHM CARD ===== */
+  .algo-card {
+    background-color: #222;
+    border-radius: 8px;
+    padding: 1.3rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border-left: 3px solid #00c8c8;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .algo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    background-color: #272727;
+  }
+
+  /* border-left colors per type */
+  .algo-card.unsupervised { border-left-color: #a040c8; }
+
+  .card-number {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    user-select: none;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 0.8rem;
+  }
+
+  .card-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .card-title-wrap {}
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .type-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .badge-supervised {
+    background: rgba(0,200,200,0.12);
+    color: #00c8c8;
+    border: 1px solid rgba(0,200,200,0.25);
+  }
+
+  .badge-unsupervised {
+    background: rgba(160,64,200,0.12);
+    color: #b060d8;
+    border: 1px solid rgba(160,64,200,0.25);
+  }
+
+  .card-desc {
+    font-size: 0.83rem;
+    color: #999;
+    line-height: 1.6;
+    margin-bottom: 0.9rem;
+  }
+
+  .mini-label {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 0.4rem;
+  }
+
+  .domains-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 0.9rem;
+  }
+
+  .domain-tag {
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .tag-tabular { color: #00c8c8; border-color: rgba(0,200,200,0.3); background: rgba(0,200,200,0.07); }
+  .tag-vision  { color: #e05080; border-color: rgba(200,64,112,0.3); background: rgba(200,64,112,0.07); }
+  .tag-nlp     { color: #6090e0; border-color: rgba(64,112,200,0.3); background: rgba(64,112,200,0.07); }
+  .tag-genai   { color: #e09050; border-color: rgba(200,120,64,0.3); background: rgba(200,120,64,0.07); }
+
+  .use-cases-box {
+    background: #1a1a1a;
+    border-radius: 6px;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #2a2a2a;
+  }
+
+  .use-cases-box ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .use-cases-box li {
+    font-size: 0.78rem;
+    color: #777;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .use-cases-box li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #00c8c8;
+    font-size: 0.7rem;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: 3rem;
+    border-top: 1px solid #333;
+    font-size: 0.9rem;
+    color: #aaa;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .algo-card:nth-child(1)  { animation-delay: 0.05s; }
+  .algo-card:nth-child(2)  { animation-delay: 0.10s; }
+  .algo-card:nth-child(3)  { animation-delay: 0.15s; }
+  .algo-card:nth-child(4)  { animation-delay: 0.20s; }
+  .algo-card:nth-child(5)  { animation-delay: 0.25s; }
+  .algo-card:nth-child(6)  { animation-delay: 0.30s; }
+  .algo-card:nth-child(7)  { animation-delay: 0.35s; }
+  .algo-card:nth-child(8)  { animation-delay: 0.40s; }
+  .algo-card:nth-child(9)  { animation-delay: 0.45s; }
+  .algo-card:nth-child(10) { animation-delay: 0.50s; }
+
+  @media (max-width: 650px) {
+    .domain-row { grid-template-columns: repeat(2, 1fr); }
+    .legend { gap: 0.8rem 1.2rem; }
+    .header h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo">Nizar Muala</div>
+  <a href="https://0nizar0.github.io/nizar-portfolio/" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-label">Portfolio Artifact · AIML-501 · Workshop One</div>
+    <h1>Machine Learning <span>Algorithm Types</span></h1>
+    <hr class="divider"/>
+    <p>A visual framework mapping 10 core ML algorithms across learning styles, application domains, and real-world use cases.</p>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-group">
+      <span class="legend-label">Type</span>
+      <div class="legend-item"><span class="legend-dot" style="background:#00c8c8"></span> Supervised</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#a040c8"></span> Unsupervised</div>
+    </div>
+    <div class="sep"></div>
+    <div class="legend-group">
+      <span class="legend-label">Domain</span>
+      <div class="legend-item"><span class="legend-dot" style="background:#00c8c8"></span> Tabular Data</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c84070"></span> Computer Vision</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#4070c8"></span> NLP</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c87840"></span> Generative AI</div>
+    </div>
+  </div>
+
+  <!-- DOMAIN SUMMARY ROW -->
+  <div class="domain-row">
+    <div class="domain-card tabular">
+      <div class="domain-icon">📊</div>
+      <div class="domain-name">Tabular Data</div>
+      <div class="domain-desc">Structured rows and columns — the backbone of business analytics and prediction.</div>
+    </div>
+    <div class="domain-card vision">
+      <div class="domain-icon">👁️</div>
+      <div class="domain-name">Computer Vision</div>
+      <div class="domain-desc">Image and video understanding through spatial feature recognition.</div>
+    </div>
+    <div class="domain-card nlp">
+      <div class="domain-icon">💬</div>
+      <div class="domain-name">NLP</div>
+      <div class="domain-desc">Language and text understanding enabling machines to process human communication.</div>
+    </div>
+    <div class="domain-card genai">
+      <div class="domain-icon">✨</div>
+      <div class="domain-name">Generative AI</div>
+      <div class="domain-desc">Creating new content — text, images, audio — learned from data patterns.</div>
+    </div>
+  </div>
+
+  <!-- ALGORITHM CARDS GRID -->
+  <div class="algo-grid">
+
+    <!-- 01 Decision Tree -->
+    <div class="algo-card supervised">
+      <div class="card-number">01</div>
+      <div class="card-header">
+        <div class="card-icon">🌿</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Decision Tree</div>
+          <span class="type-badge badge-supervised">Supervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Classifies data through a series of yes/no questions about input features, branching into narrower categories until a final prediction is reached. Fully interpretable — every decision can be traced.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-tabular">Tabular Data</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Loan approval decisions in banking</li>
+          <li>Medical diagnosis from patient symptoms</li>
+          <li>Customer churn prediction</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 02 Random Forest -->
+    <div class="algo-card supervised">
+      <div class="card-number">02</div>
+      <div class="card-header">
+        <div class="card-icon">🌲</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Random Forest</div>
+          <span class="type-badge badge-supervised">Supervised</span>
+        </div>
+      </div>
+      <p class="card-desc">An ensemble of many Decision Trees each trained on a random data subset. The final prediction is a majority vote across all trees, making it significantly more robust and accurate than a single tree.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-tabular">Tabular Data</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Fraud detection in financial transactions</li>
+          <li>Stock market risk assessment</li>
+          <li>Disease prediction from clinical data</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 03 Linear Regression -->
+    <div class="algo-card supervised">
+      <div class="card-number">03</div>
+      <div class="card-header">
+        <div class="card-icon">📈</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Linear Regression</div>
+          <span class="type-badge badge-supervised">Supervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Models the relationship between input features and a continuous output by fitting a straight line through the data, minimizing the error between predicted and actual values to forecast numerical outcomes.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-tabular">Tabular Data</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Real estate price prediction</li>
+          <li>Sales revenue forecasting</li>
+          <li>Energy consumption estimation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 04 Support Vector Machine -->
+    <div class="algo-card supervised">
+      <div class="card-number">04</div>
+      <div class="card-header">
+        <div class="card-icon">⚡</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Support Vector Machine</div>
+          <span class="type-badge badge-supervised">Supervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Finds the optimal boundary that best separates data into classes with the largest possible margin between them. Highly effective in high-dimensional spaces and where classification precision matters most.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-tabular">Tabular Data</span>
+        <span class="domain-tag tag-vision">Computer Vision</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Spam email classification</li>
+          <li>Cancer cell detection from imaging</li>
+          <li>Text sentiment classification</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 05 K-Means Clustering -->
+    <div class="algo-card unsupervised">
+      <div class="card-number">05</div>
+      <div class="card-header">
+        <div class="card-icon">🔵</div>
+        <div class="card-title-wrap">
+          <div class="card-title">K-Means Clustering</div>
+          <span class="type-badge badge-unsupervised">Unsupervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Groups data points into K clusters by iteratively assigning each point to its nearest cluster center, then recalculating centers. Discovers natural groupings in data without needing any labels.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-tabular">Tabular Data</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Customer segmentation in marketing</li>
+          <li>Document topic grouping</li>
+          <li>Anomaly detection in network traffic</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 06 PCA -->
+    <div class="algo-card unsupervised">
+      <div class="card-number">06</div>
+      <div class="card-header">
+        <div class="card-icon">🔮</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Principal Component Analysis</div>
+          <span class="type-badge badge-unsupervised">Unsupervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Reduces dataset dimensionality by identifying the directions that capture the most variance. Simplifies complex, high-dimensional data while preserving its most meaningful structure and patterns.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-tabular">Tabular Data</span>
+        <span class="domain-tag tag-vision">Computer Vision</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Feature reduction before model training</li>
+          <li>Face recognition preprocessing</li>
+          <li>Genomics and bioinformatics analysis</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 07 CNN -->
+    <div class="algo-card supervised">
+      <div class="card-number">07</div>
+      <div class="card-header">
+        <div class="card-icon">👁️</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Convolutional Neural Network</div>
+          <span class="type-badge badge-supervised">Supervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Uses convolutional layers to automatically detect spatial features like edges, textures, and shapes from images. Deeper layers progressively learn more abstract representations enabling powerful visual understanding.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-vision">Computer Vision</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Medical image diagnosis (X-rays, MRIs)</li>
+          <li>Autonomous vehicle object detection</li>
+          <li>Facial recognition systems</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 08 Transformer -->
+    <div class="algo-card supervised">
+      <div class="card-number">08</div>
+      <div class="card-header">
+        <div class="card-icon">🧠</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Transformer (GPT / BERT)</div>
+          <span class="type-badge badge-supervised">Supervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Uses self-attention mechanisms to capture relationships between all words in a sequence simultaneously. Transformers power most modern NLP systems, understanding long-range context and meaning across text.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-nlp">NLP</span>
+        <span class="domain-tag tag-genai">Generative AI</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>ChatGPT conversational AI</li>
+          <li>Google search query understanding</li>
+          <li>Automated document summarization</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 09 GAN -->
+    <div class="algo-card unsupervised">
+      <div class="card-number">09</div>
+      <div class="card-header">
+        <div class="card-icon">🎨</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Generative Adversarial Network</div>
+          <span class="type-badge badge-unsupervised">Unsupervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Two networks — a Generator and a Discriminator — compete with each other. The Generator creates synthetic data while the Discriminator tries to detect it as fake. Over time both improve, producing increasingly realistic outputs.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-vision">Computer Vision</span>
+        <span class="domain-tag tag-genai">Generative AI</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>Synthetic image and video generation</li>
+          <li>Synthetic training data creation</li>
+          <li>Artistic style transfer</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 10 Diffusion Models -->
+    <div class="algo-card unsupervised">
+      <div class="card-number">10</div>
+      <div class="card-header">
+        <div class="card-icon">🌊</div>
+        <div class="card-title-wrap">
+          <div class="card-title">Diffusion Models</div>
+          <span class="type-badge badge-unsupervised">Unsupervised</span>
+        </div>
+      </div>
+      <p class="card-desc">Learns to generate content by training on gradually adding noise to data, then learning to reverse that process step by step. Currently powers leading image generation systems with highly realistic, detailed outputs.</p>
+      <div class="mini-label">Domains</div>
+      <div class="domains-wrap">
+        <span class="domain-tag tag-vision">Computer Vision</span>
+        <span class="domain-tag tag-genai">Generative AI</span>
+      </div>
+      <div class="mini-label">Use Cases</div>
+      <div class="use-cases-box">
+        <ul>
+          <li>DALL·E and Stable Diffusion image generation</li>
+          <li>Drug molecule design in pharma research</li>
+          <li>Video and audio content synthesis</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /algo-grid -->
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Nizar Muala &nbsp;·&nbsp; AIML-501 Model Development &nbsp;·&nbsp; Indiana Wesleyan University</p>
+  </footer>
+
+</div>
+</body>
+</html>
