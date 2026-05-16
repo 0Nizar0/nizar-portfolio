@@ -79,6 +79,23 @@ link: null,
 pdf: process.env.PUBLIC_URL + "/artifacts/Commercial_Applications_of_AI.pdf"
 },
 
+/* ✅ AIML-501 Workshop 1 */
+{
+title: "Machine Learning Algorithm Types",
+artifactType: "Interactive HTML Infographic",
+introduction: "A visual framework mapping 10 core machine learning algorithms across their learning styles, application domains, and real-world use cases.",
+description: "This infographic categorizes key ML algorithms — including Decision Trees, Random Forest, Linear Regression, SVM, K-Means, PCA, CNN, Transformers, GANs, and Diffusion Models — by learning type (supervised vs. unsupervised) and application domain (tabular data, computer vision, NLP, and generative AI). Each algorithm includes a concise explanation and practical real-world examples.",
+objective: "To clearly identify and categorize key machine learning algorithms, illustrate their primary application domains through a visually compelling framework, and provide practical examples that communicate their significance within AI applications.",
+process: "Reviewed course materials on AI/ML algorithm types and domains; researched real-world use cases for each algorithm; designed and built an interactive HTML infographic styled to match the professional portfolio, organized with a domain summary row, legend, and individual algorithm cards.",
+tools: "HTML, CSS, course materials, online research",
+valueProposition: "Demonstrates the ability to synthesize and communicate complex ML concepts in a clear, professional, and visually accessible format suitable for both technical and non-technical audiences.",
+uniqueValue: "Combines technical accuracy with clean visual design — matching the portfolio's aesthetic — to present a comprehensive ML algorithm reference that serves as a practical guide throughout the course and beyond.",
+relevance: "Understanding algorithm types and their appropriate domains is a foundational skill for any AI/ML professional. This artifact shows the ability to organize and communicate that knowledge effectively.",
+references: "Course materials (AIML-501), Microsoft Azure ML Algorithm Reference, IBM Technology resources, industry AI/ML documentation",
+link: process.env.PUBLIC_URL + "/artifacts/ml_algorithms.html",
+pdf: null
+},
+
 /* ✅ NEW ARTIFACT ADDED */
 {
 title: "Generative AI Storytelling for Brand Development",
