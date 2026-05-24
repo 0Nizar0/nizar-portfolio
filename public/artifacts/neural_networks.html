@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Visualizing Neural Networks | Nizar Muala</title>
+<style>
+  /* ── PORTFOLIO MATCH ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(160deg, #1e1e1e 0%, #111 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ──────────────────────────────────────────────────── */
+  .navbar {
+    position: sticky; top: 0;
+    background-color: #111;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.7rem 2rem;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+  }
+  .nav-logo { font-weight: bold; font-size: 1.5rem; color: #00c8c8; letter-spacing: 0.5px; }
+  .nav-back {
+    background: none; border: 1px solid #00c8c8;
+    color: #e0e0e0; font-size: 0.95rem; cursor: pointer;
+    padding: 0.45rem 0.9rem; border-radius: 6px;
+    transition: all 0.3s ease; text-decoration: none;
+  }
+  .nav-back:hover { background-color: #00c8c8; color: #111; transform: translateY(-2px); }
+
+  /* ── SLIDE CONTAINER ─────────────────────────────────────────── */
+  .presentation {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 5rem;
+  }
+
+  /* ── SLIDE ───────────────────────────────────────────────────── */
+  .slide {
+    display: none;
+    animation: fadeUp 0.45s ease both;
+  }
+  .slide.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SLIDE TYPES ─────────────────────────────────────────────── */
+
+  /* Title slide */
+  .slide-title {
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  .slide-title::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, #00c8c8, transparent);
+  }
+  .slide-title .eyebrow {
+    font-size: 0.78rem; letter-spacing: 4px; text-transform: uppercase;
+    color: #00c8c8; margin-bottom: 1.2rem;
+  }
+  .slide-title h1 {
+    font-size: 2.8rem; font-weight: 700; color: #fff;
+    line-height: 1.15; margin-bottom: 0.8rem;
+  }
+  .slide-title h1 span { color: #00c8c8; }
+  .slide-title .subtitle {
+    font-size: 1.05rem; color: #888; max-width: 520px;
+    margin: 0 auto 2rem; line-height: 1.6;
+  }
+  .meta-row {
+    display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .meta-item { font-size: 0.82rem; color: #666; }
+  .meta-item strong { color: #00c8c8; }
+
+  /* Content slide */
+  .slide-content {
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .slide-header {
+    background: #151515;
+    padding: 1.4rem 2rem;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .slide-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(0,200,200,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; flex-shrink: 0;
+  }
+  .slide-header h2 { font-size: 1.5rem; color: #fff; font-weight: 600; }
+  .slide-header .slide-num {
+    margin-left: auto; font-size: 0.75rem; color: #444;
+    letter-spacing: 2px; font-family: monospace;
+  }
+  .slide-body { padding: 2rem; }
+
+  /* Two-column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+
+  /* Cards inside slides */
+  .info-card {
+    background: #222;
+    border-radius: 8px;
+    padding: 1.2rem;
+    border: 1px solid #2e2e2e;
+    transition: all 0.3s ease;
+  }
+  .info-card:hover { border-color: #00c8c8; transform: translateY(-2px); }
+  .info-card h3 { font-size: 0.95rem; color: #00c8c8; margin-bottom: 0.5rem; font-weight: 600; }
+  .info-card p  { font-size: 0.83rem; color: #999; line-height: 1.6; }
+
+  /* Definition box */
+  .def-box {
+    background: rgba(0,200,200,0.06);
+    border-left: 3px solid #00c8c8;
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .def-box .def-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: #00c8c8; margin-bottom: 0.3rem; }
+  .def-box p { font-size: 0.9rem; color: #ccc; line-height: 1.6; }
+
+  /* Feature list */
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .feature-list li {
+    font-size: 0.85rem; color: #aaa; padding-left: 1.2rem;
+    position: relative; line-height: 1.5;
+  }
+  .feature-list li::before { content: '→'; position: absolute; left: 0; color: #00c8c8; font-size: 0.78rem; }
+
+  /* Formula box */
+  .formula {
+    background: #111; border: 1px solid #2a2a2a; border-radius: 8px;
+    padding: 1rem 1.2rem; font-family: 'Courier New', monospace;
+    font-size: 0.88rem; color: #00e0e0; text-align: center;
+    margin: 0.8rem 0;
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    background: rgba(0,200,200,0.1); color: #00c8c8;
+    border: 1px solid rgba(0,200,200,0.25); margin: 3px 2px;
+  }
+  .tag.orange { background: rgba(200,140,60,0.1); color: #c89050; border-color: rgba(200,140,60,0.25); }
+  .tag.purple { background: rgba(140,80,200,0.1); color: #a870d8; border-color: rgba(140,80,200,0.25); }
+  .tag.green  { background: rgba(60,180,100,0.1); color: #50c870; border-color: rgba(60,180,100,0.25); }
+
+  /* ── NEURAL NET SVG DIAGRAM ──────────────────────────────────── */
+  .diagram-wrap {
+    background: #111; border-radius: 10px; border: 1px solid #2a2a2a;
+    padding: 1.2rem; margin-bottom: 1.2rem;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: auto; }
+
+  /* ── ACTIVATION FUNCTION GRAPHS ─────────────────────────────── */
+  .func-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  .func-card {
+    background: #222; border-radius: 8px; padding: 1rem;
+    border: 1px solid #2e2e2e; text-align: center;
+    transition: all 0.3s ease;
+  }
+  .func-card:hover { border-color: #00c8c8; }
+  .func-card h4 { font-size: 0.85rem; color: #00c8c8; margin-bottom: 0.4rem; }
+  .func-card .formula-sm {
+    font-family: 'Courier New', monospace; font-size: 0.75rem;
+    color: #00e0e0; margin-bottom: 0.6rem;
+  }
+  .func-card p { font-size: 0.75rem; color: #888; line-height: 1.4; }
+
+  /* ── SUMMARY SLIDE ───────────────────────────────────────────── */
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .summary-card {
+    background: #222; border-radius: 8px; padding: 1.1rem;
+    border: 1px solid #2e2e2e; text-align: center;
+    transition: all 0.3s ease;
+  }
+  .summary-card:hover { background: #00c8c8; color: #111; border-color: #00c8c8; }
+  .summary-card:hover h4 { color: #111; }
+  .summary-card:hover p  { color: #1a1a1a; }
+  .summary-card .s-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .summary-card h4 { font-size: 0.9rem; color: #00c8c8; margin-bottom: 0.4rem; font-weight: 600; transition: color 0.3s; }
+  .summary-card p  { font-size: 0.78rem; color: #888; line-height: 1.4; transition: color 0.3s; }
+
+  /* ── NAV CONTROLS ────────────────────────────────────────────── */
+  .nav-controls {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #111;
+    border-top: 1px solid #222;
+    display: flex; justify-content: center; align-items: center;
+    gap: 1.5rem; padding: 0.9rem 2rem;
+    z-index: 998;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  }
+  .nav-btn {
+    background: #222; border: 1px solid #333; color: #e0e0e0;
+    padding: 0.5rem 1.4rem; border-radius: 6px; cursor: pointer;
+    font-size: 0.9rem; font-family: inherit;
+    transition: all 0.3s ease;
+  }
+  .nav-btn:hover { background: #00c8c8; color: #111; border-color: #00c8c8; transform: translateY(-2px); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .slide-counter { font-size: 0.85rem; color: #555; letter-spacing: 1px; min-width: 70px; text-align: center; }
+  .progress-bar {
+    position: fixed; bottom: 53px; left: 0; right: 0;
+    height: 2px; background: #1a1a1a; z-index: 999;
+  }
+  .progress-fill {
+    height: 100%; background: #00c8c8;
+    transition: width 0.3s ease;
+  }
+
+  /* ── RESPONSIVE ──────────────────────────────────────────────── */
+  @media (max-width: 680px) {
+    .two-col, .three-col, .func-grid, .summary-grid { grid-template-columns: 1fr; }
+    .slide-title h1 { font-size: 2rem; }
+    .presentation { padding: 1.5rem 1rem 5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-logo">Nizar Muala</div>
+  <a href="https://0nizar0.github.io/nizar-portfolio/" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="presentation">
+
+  <!-- ══ SLIDE 1: TITLE ══════════════════════════════════════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-title">
+      <div class="eyebrow">Portfolio Artifact · AIML-501 · Workshop Two</div>
+      <h1>Visualizing<br/><span>Neural Networks</span></h1>
+      <p class="subtitle">A visual breakdown of neural network structure — from neurons and weights to loss functions and optimization — and how each component drives learning.</p>
+      <div class="meta-row">
+        <div class="meta-item"><strong>Course</strong> AIML-501 Model Development</div>
+        <div class="meta-item"><strong>Tool</strong> TensorFlow Neural Network Playground</div>
+        <div class="meta-item"><strong>Slides</strong> 9</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 2: ARCHITECTURE OVERVIEW ════════════════════════ -->
+  <div class="slide" id="slide-2">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">🧠</div>
+        <h2>Neural Network Architecture</h2>
+        <span class="slide-num">02 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Overview</div>
+          <p>A neural network is a layered system of interconnected nodes (neurons) that processes input data, transforms it through hidden layers, and produces a predicted output. Each layer learns progressively more abstract features from the data.</p>
+        </div>
+
+        <!-- SVG Architecture Diagram -->
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 760 260" width="720" height="260" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background -->
+            <rect width="760" height="260" fill="#0f0f0f" rx="8"/>
+
+            <!-- Layer labels -->
+            <text x="100" y="24" fill="#00c8c8" font-size="11" font-family="Segoe UI" text-anchor="middle" font-weight="600">INPUT LAYER</text>
+            <text x="280" y="24" fill="#888" font-size="11" font-family="Segoe UI" text-anchor="middle">HIDDEN LAYER 1</text>
+            <text x="460" y="24" fill="#888" font-size="11" font-family="Segoe UI" text-anchor="middle">HIDDEN LAYER 2</text>
+            <text x="640" y="24" fill="#50c878" font-size="11" font-family="Segoe UI" text-anchor="middle" font-weight="600">OUTPUT LAYER</text>
+
+            <!-- Connections: Input → Hidden1 -->
+            <g stroke="#1e3a3a" stroke-width="1" opacity="0.7">
+              <line x1="130" y1="70"  x2="248" y2="80"/>
+              <line x1="130" y1="70"  x2="248" y2="130"/>
+              <line x1="130" y1="70"  x2="248" y2="180"/>
+              <line x1="130" y1="130" x2="248" y2="80"/>
+              <line x1="130" y1="130" x2="248" y2="130"/>
+              <line x1="130" y1="130" x2="248" y2="180"/>
+              <line x1="130" y1="190" x2="248" y2="80"/>
+              <line x1="130" y1="190" x2="248" y2="130"/>
+              <line x1="130" y1="190" x2="248" y2="180"/>
+            </g>
+            <!-- Connections: H1 → H2 -->
+            <g stroke="#1a2e3a" stroke-width="1" opacity="0.7">
+              <line x1="312" y1="80"  x2="428" y2="80"/>
+              <line x1="312" y1="80"  x2="428" y2="130"/>
+              <line x1="312" y1="80"  x2="428" y2="180"/>
+              <line x1="312" y1="130" x2="428" y2="80"/>
+              <line x1="312" y1="130" x2="428" y2="130"/>
+              <line x1="312" y1="130" x2="428" y2="180"/>
+              <line x1="312" y1="180" x2="428" y2="80"/>
+              <line x1="312" y1="180" x2="428" y2="130"/>
+              <line x1="312" y1="180" x2="428" y2="180"/>
+            </g>
+            <!-- Connections: H2 → Output -->
+            <g stroke="#1a3a2a" stroke-width="1" opacity="0.7">
+              <line x1="492" y1="80"  x2="608" y2="105"/>
+              <line x1="492" y1="80"  x2="608" y2="155"/>
+              <line x1="492" y1="130" x2="608" y2="105"/>
+              <line x1="492" y1="130" x2="608" y2="155"/>
+              <line x1="492" y1="180" x2="608" y2="105"/>
+              <line x1="492" y1="180" x2="608" y2="155"/>
+            </g>
+
+            <!-- Input neurons -->
+            <g fill="#0f2a2a" stroke="#00c8c8" stroke-width="1.5">
+              <circle cx="130" cy="70"  r="18"/><circle cx="130" cy="130" r="18"/><circle cx="130" cy="190" r="18"/>
+            </g>
+            <text x="130" y="74"  fill="#00c8c8" font-size="9" text-anchor="middle" font-family="Segoe UI">x₁</text>
+            <text x="130" y="134" fill="#00c8c8" font-size="9" text-anchor="middle" font-family="Segoe UI">x₂</text>
+            <text x="130" y="194" fill="#00c8c8" font-size="9" text-anchor="middle" font-family="Segoe UI">x₃</text>
+
+            <!-- Hidden1 neurons -->
+            <g fill="#1a1a2a" stroke="#5566aa" stroke-width="1.5">
+              <circle cx="280" cy="80"  r="18"/><circle cx="280" cy="130" r="18"/><circle cx="280" cy="180" r="18"/>
+            </g>
+            <text x="280" y="84"  fill="#8899cc" font-size="9" text-anchor="middle" font-family="Segoe UI">h₁</text>
+            <text x="280" y="134" fill="#8899cc" font-size="9" text-anchor="middle" font-family="Segoe UI">h₂</text>
+            <text x="280" y="184" fill="#8899cc" font-size="9" text-anchor="middle" font-family="Segoe UI">h₃</text>
+
+            <!-- Hidden2 neurons -->
+            <g fill="#1a1a2a" stroke="#7755aa" stroke-width="1.5">
+              <circle cx="460" cy="80"  r="18"/><circle cx="460" cy="130" r="18"/><circle cx="460" cy="180" r="18"/>
+            </g>
+            <text x="460" y="84"  fill="#aa88cc" font-size="9" text-anchor="middle" font-family="Segoe UI">h₄</text>
+            <text x="460" y="134" fill="#aa88cc" font-size="9" text-anchor="middle" font-family="Segoe UI">h₅</text>
+            <text x="460" y="184" fill="#aa88cc" font-size="9" text-anchor="middle" font-family="Segoe UI">h₆</text>
+
+            <!-- Output neurons -->
+            <g fill="#0f2a1a" stroke="#50c878" stroke-width="1.5">
+              <circle cx="640" cy="105" r="18"/><circle cx="640" cy="155" r="18"/>
+            </g>
+            <text x="640" y="109" fill="#50c878" font-size="9" text-anchor="middle" font-family="Segoe UI">ŷ₁</text>
+            <text x="640" y="159" fill="#50c878" font-size="9" text-anchor="middle" font-family="Segoe UI">ŷ₂</text>
+
+            <!-- Data flow arrow -->
+            <defs>
+              <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L8,3 z" fill="#00c8c8" opacity="0.5"/>
+              </marker>
+            </defs>
+            <line x1="50" y1="130" x2="108" y2="130" stroke="#00c8c8" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5" stroke-dasharray="4,3"/>
+            <text x="50" y="118" fill="#555" font-size="10" font-family="Segoe UI">data in</text>
+
+            <line x1="660" y1="130" x2="710" y2="130" stroke="#50c878" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5" stroke-dasharray="4,3"/>
+            <text x="662" y="118" fill="#555" font-size="10" font-family="Segoe UI">output</text>
+
+            <!-- Weight annotation -->
+            <text x="190" y="248" fill="#444" font-size="10" font-family="Segoe UI" text-anchor="middle">weights w</text>
+            <text x="370" y="248" fill="#444" font-size="10" font-family="Segoe UI" text-anchor="middle">activation f(x)</text>
+            <text x="555" y="248" fill="#444" font-size="10" font-family="Segoe UI" text-anchor="middle">weights w</text>
+          </svg>
+        </div>
+
+        <div class="two-col">
+          <div class="info-card">
+            <h3>Forward Pass</h3>
+            <p>Data flows from input → hidden layers → output. Each neuron applies a weighted sum and activation function to transform the signal.</p>
+          </div>
+          <div class="info-card">
+            <h3>Backward Pass</h3>
+            <p>The error is calculated at the output and propagated back through the network, adjusting weights to minimize the loss. This is backpropagation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 3: LAYERS ════════════════════════════════════════ -->
+  <div class="slide" id="slide-3">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">📐</div>
+        <h2>Layers</h2>
+        <span class="slide-num">03 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <p>Layers are the structural building blocks of a neural network. Each layer is a collection of neurons that receive inputs, process them, and pass the result to the next layer. The arrangement of layers defines the network's depth and capacity to learn.</p>
+        </div>
+        <div class="three-col">
+          <div class="info-card">
+            <h3>🟢 Input Layer</h3>
+            <p>Receives raw data — pixel values, word embeddings, numerical features. No computation happens here; it just passes the data forward. One neuron per input feature.</p>
+          </div>
+          <div class="info-card">
+            <h3>⚙️ Hidden Layer(s)</h3>
+            <p>Where the actual learning happens. Each hidden layer extracts progressively more abstract features. More layers = deeper network = more complex patterns it can learn.</p>
+          </div>
+          <div class="info-card">
+            <h3>🎯 Output Layer</h3>
+            <p>Produces the final prediction. The number of neurons here matches the task — one for binary classification, multiple for multi-class, one for regression.</p>
+          </div>
+        </div>
+        <br/>
+        <div class="info-card">
+          <h3>Why Layer Depth Matters</h3>
+          <p>A shallow network (1-2 hidden layers) can approximate simple functions. Deeper networks can represent hierarchical features — like how a CNN's early layers detect edges, middle layers detect shapes, and later layers detect entire objects. Depth is what enables neural networks to solve genuinely complex problems.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 4: NEURONS ═══════════════════════════════════════ -->
+  <div class="slide" id="slide-4">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">🔵</div>
+        <h2>Neurons</h2>
+        <span class="slide-num">04 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <p>A neuron is the basic computational unit of a neural network. It receives one or more inputs, multiplies each by a weight, adds a bias, and passes the result through an activation function to produce an output signal.</p>
+        </div>
+        <div class="formula">output = activation( Σ(input × weight) + bias )</div>
+        <div class="two-col" style="margin-top:1rem">
+          <div>
+            <div class="info-card" style="margin-bottom:0.8rem">
+              <h3>Inputs</h3>
+              <p>Values received from the previous layer (or raw data if input layer). Each input is multiplied by a corresponding weight before being summed.</p>
+            </div>
+            <div class="info-card">
+              <h3>Bias</h3>
+              <p>A learnable offset added to the weighted sum. Allows the neuron to shift its activation threshold, giving the model more flexibility to fit the data.</p>
+            </div>
+          </div>
+          <div>
+            <div class="info-card" style="margin-bottom:0.8rem">
+              <h3>Biological Parallel</h3>
+              <p>Inspired loosely by biological neurons — inputs arrive via dendrites, the cell body processes the signal, and if it exceeds a threshold, an output fires along the axon.</p>
+            </div>
+            <div class="info-card">
+              <h3>Scale</h3>
+              <p>Modern LLMs can have hundreds of billions of neurons across thousands of layers, all working in parallel to process information simultaneously.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 5: WEIGHTS ═══════════════════════════════════════ -->
+  <div class="slide" id="slide-5">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">⚖️</div>
+        <h2>Weights</h2>
+        <span class="slide-num">05 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <p>Weights are learnable numerical parameters attached to every connection between neurons. They determine how much influence each input has on the neuron's output. Training a neural network is fundamentally about finding the right set of weights.</p>
+        </div>
+        <div class="two-col">
+          <div>
+            <ul class="feature-list" style="margin-bottom:1rem">
+              <li>Initially set to small random values to break symmetry</li>
+              <li>Updated during backpropagation based on the gradient of the loss</li>
+              <li>A high positive weight amplifies an input's influence</li>
+              <li>A negative weight suppresses or inverts the signal</li>
+              <li>A near-zero weight means the connection has little effect</li>
+            </ul>
+          </div>
+          <div>
+            <div class="info-card" style="margin-bottom:0.8rem">
+              <h3>Weight Initialization</h3>
+              <p>Poor initialization (all zeros or all same value) causes neurons to learn identical features. Random or Xavier initialization ensures diverse learning from the start.</p>
+            </div>
+            <div class="info-card">
+              <h3>Regularization</h3>
+              <p>Techniques like L1/L2 regularization penalize large weights to prevent the model from over-relying on any single connection — reducing overfitting.</p>
+            </div>
+          </div>
+        </div>
+        <div class="formula">updated weight = weight − learning_rate × gradient</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 6: ACTIVATION FUNCTIONS ════════════════════════ -->
+  <div class="slide" id="slide-6">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">⚡</div>
+        <h2>Activation Functions</h2>
+        <span class="slide-num">06 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <p>Activation functions introduce non-linearity into the network. Without them, stacking layers would be equivalent to a single linear transformation — no matter how deep the network. Non-linearity is what allows neural networks to model complex, real-world relationships.</p>
+        </div>
+        <div class="func-grid">
+          <div class="func-card">
+            <h4>ReLU</h4>
+            <div class="formula-sm">f(x) = max(0, x)</div>
+            <p>Most widely used. Fast to compute, avoids vanishing gradients. Outputs zero for negative inputs, passes positive values unchanged.</p>
+            <div style="margin-top:0.5rem"><span class="tag">Hidden Layers</span></div>
+          </div>
+          <div class="func-card">
+            <h4>Sigmoid</h4>
+            <div class="formula-sm">f(x) = 1 / (1 + e⁻ˣ)</div>
+            <p>Squashes output to (0,1). Good for binary classification outputs. Can suffer from vanishing gradients in deep networks.</p>
+            <div style="margin-top:0.5rem"><span class="tag">Output (Binary)</span></div>
+          </div>
+          <div class="func-card">
+            <h4>Softmax</h4>
+            <div class="formula-sm">f(xᵢ) = eˣⁱ / Σeˣʲ</div>
+            <p>Converts a vector of values into a probability distribution summing to 1. Standard for multi-class classification outputs.</p>
+            <div style="margin-top:0.5rem"><span class="tag">Output (Multi-class)</span></div>
+          </div>
+          <div class="func-card">
+            <h4>Tanh</h4>
+            <div class="formula-sm">f(x) = (eˣ − e⁻ˣ) / (eˣ + e⁻ˣ)</div>
+            <p>Outputs between -1 and 1. Zero-centered, which can make training easier than sigmoid in some architectures.</p>
+            <div style="margin-top:0.5rem"><span class="tag">RNNs</span></div>
+          </div>
+          <div class="func-card">
+            <h4>Leaky ReLU</h4>
+            <div class="formula-sm">f(x) = max(0.01x, x)</div>
+            <p>Fixes the "dying ReLU" problem by allowing a small gradient for negative inputs instead of outputting zero.</p>
+            <div style="margin-top:0.5rem"><span class="tag">Hidden Layers</span></div>
+          </div>
+          <div class="func-card">
+            <h4>Linear</h4>
+            <div class="formula-sm">f(x) = x</div>
+            <p>No transformation. Used in regression output layers where the prediction is a continuous value with no range constraint.</p>
+            <div style="margin-top:0.5rem"><span class="tag">Output (Regression)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 7: LOSS FUNCTIONS ═══════════════════════════════ -->
+  <div class="slide" id="slide-7">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">📉</div>
+        <h2>Loss Functions</h2>
+        <span class="slide-num">07 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <p>A loss function measures how far the model's predictions are from the actual labels. It produces a single number that quantifies the model's error on a given batch of data. The entire training process is about minimizing this number.</p>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="info-card" style="margin-bottom:0.8rem">
+              <h3>Mean Squared Error (MSE)</h3>
+              <p>Used for regression tasks. Calculates the average of the squared differences between predicted and actual values. Heavily penalizes large errors.</p>
+              <div class="formula" style="font-size:0.78rem;margin-top:0.5rem">MSE = (1/n) × Σ(y − ŷ)²</div>
+            </div>
+            <div class="info-card">
+              <h3>Binary Cross-Entropy</h3>
+              <p>Used for binary classification. Measures the difference between the predicted probability and the actual binary label (0 or 1).</p>
+              <span class="tag">Spam detection</span>
+              <span class="tag">Fraud detection</span>
+            </div>
+          </div>
+          <div>
+            <div class="info-card" style="margin-bottom:0.8rem">
+              <h3>Categorical Cross-Entropy</h3>
+              <p>Used for multi-class classification. Compares the predicted probability distribution to the true one-hot encoded label. Standard for image classification and NLP tasks.</p>
+              <span class="tag orange">Image classification</span>
+              <span class="tag orange">Language models</span>
+            </div>
+            <div class="info-card">
+              <h3>Why Loss Function Choice Matters</h3>
+              <p>The wrong loss function sends the wrong signal during training. Using MSE for classification, for example, doesn't properly penalize confident wrong predictions the way cross-entropy does.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 8: OPTIMIZATION ══════════════════════════════════ -->
+  <div class="slide" id="slide-8">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">🔧</div>
+        <h2>Optimization Algorithms</h2>
+        <span class="slide-num">08 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="def-box">
+          <div class="def-label">Definition</div>
+          <p>Optimization algorithms define how the model's weights are updated during training. They use the gradients computed by backpropagation to move the weights in a direction that reduces the loss. The choice of optimizer and its settings (especially learning rate) significantly impacts training speed and final performance.</p>
+        </div>
+        <div class="three-col">
+          <div class="info-card">
+            <h3>Gradient Descent (SGD)</h3>
+            <p>The foundational optimizer. Computes the gradient of the loss across the entire dataset and steps in the negative gradient direction. Slow for large datasets.</p>
+            <div style="margin-top:0.6rem"><span class="tag">Simple tasks</span></div>
+          </div>
+          <div class="info-card">
+            <h3>Mini-batch SGD</h3>
+            <p>Computes gradients on small random batches rather than the full dataset. Faster and introduces beneficial noise that can help escape local minima.</p>
+            <div style="margin-top:0.6rem"><span class="tag">Most common</span></div>
+          </div>
+          <div class="info-card">
+            <h3>Adam</h3>
+            <p>Adaptive Moment Estimation. Combines momentum and adaptive learning rates per parameter. Generally the best default choice — fast convergence, robust performance.</p>
+            <div style="margin-top:0.6rem"><span class="tag purple">Industry standard</span></div>
+          </div>
+        </div>
+        <br/>
+        <div class="two-col">
+          <div class="info-card">
+            <h3>Learning Rate</h3>
+            <p>The single most important hyperparameter. Too high → training is unstable and overshoots the minimum. Too low → training is painfully slow. Learning rate schedules (warmup, decay) are commonly used in modern training pipelines.</p>
+          </div>
+          <div class="info-card">
+            <h3>Momentum</h3>
+            <p>Accumulates a velocity vector in the direction of consistent gradients, helping the optimizer accelerate through flat regions and dampen oscillations in ravines. Used by SGD with momentum and Adam.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 9: SUMMARY ══════════════════════════════════════ -->
+  <div class="slide" id="slide-9">
+    <div class="slide-content">
+      <div class="slide-header">
+        <div class="slide-icon">✅</div>
+        <h2>Summary & Key Takeaways</h2>
+        <span class="slide-num">09 / 09</span>
+      </div>
+      <div class="slide-body">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="s-icon">📐</div>
+            <h4>Layers</h4>
+            <p>The structure. Input, hidden, and output layers stack to form depth. Depth enables complex feature learning.</p>
+          </div>
+          <div class="summary-card">
+            <div class="s-icon">🔵</div>
+            <h4>Neurons</h4>
+            <p>The units. Each applies a weighted sum + activation to transform and pass signals forward through the network.</p>
+          </div>
+          <div class="summary-card">
+            <div class="s-icon">⚖️</div>
+            <h4>Weights</h4>
+            <p>The memory. Learnable parameters that encode what the model has learned. Training is entirely about optimizing weights.</p>
+          </div>
+          <div class="summary-card">
+            <div class="s-icon">⚡</div>
+            <h4>Activation Functions</h4>
+            <p>The non-linearity. Without them, deep networks collapse into a single linear operation. ReLU dominates hidden layers.</p>
+          </div>
+          <div class="summary-card">
+            <div class="s-icon">📉</div>
+            <h4>Loss Functions</h4>
+            <p>The signal. Measures how wrong the model is. Backpropagation uses this signal to update every weight in the network.</p>
+          </div>
+          <div class="summary-card">
+            <div class="s-icon">🔧</div>
+            <h4>Optimization</h4>
+            <p>The engine. Gradient descent and Adam translate the loss signal into actual weight updates that improve the model over time.</p>
+          </div>
+        </div>
+        <div class="def-box">
+          <div class="def-label">Key Insight</div>
+          <p>Every component in a neural network has a specific, irreplaceable role. Remove any one of them and the learning process breaks down. What makes neural networks powerful isn't any single component — it's how they work together across millions of iterations to find patterns in data that no human explicitly programmed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /presentation -->
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:11.1%"></div></div>
+
+<!-- NAVIGATION -->
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>← Prev</button>
+  <span class="slide-counter" id="slideCounter">1 / 9</span>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  let current = 1;
+  const total = 9;
+
+  function changeSlide(dir) {
+    document.getElementById('slide-' + current).classList.remove('active');
+    current += dir;
+    document.getElementById('slide-' + current).classList.add('active');
+    document.getElementById('slideCounter').textContent = current + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((current / total) * 100) + '%';
+    document.getElementById('prevBtn').disabled = current === 1;
+    document.getElementById('nextBtn').disabled = current === total;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && current < total) changeSlide(1);
+    if (e.key === 'ArrowLeft'  && current > 1)     changeSlide(-1);
+  });
+</script>
+</body>
+</html>

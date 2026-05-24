@@ -96,7 +96,23 @@ link: process.env.PUBLIC_URL + "/artifacts/ml_algorithms.html",
 pdf: null
 },
 
-/* ✅ NEW ARTIFACT ADDED */
+/* ✅ AIML-501 Workshop 2 */
+{
+title: "Visualizing Neural Networks",
+artifactType: "Interactive HTML Presentation",
+introduction: "A 9-slide visual presentation covering the core components of neural networks — layers, neurons, weights, activation functions, loss functions, and optimization algorithms.",
+description: "This presentation walks through the architecture and function of neural networks using diagrams, component breakdowns, and real-world context. It includes a hand-built SVG architecture diagram showing data flow from input through hidden layers to output, detailed slides for each of the six key components, and a summary slide synthesizing the key insights.",
+objective: "To clearly define and describe key neural network components, visually illustrate their roles and functions, and communicate complex AI concepts in a concise, professional, and accessible format.",
+process: "Explored the TensorFlow Neural Network Playground with different data types, noise levels, and layer configurations to observe their impact on training. Used those observations to inform the explanations and visuals in the presentation. Built a custom interactive HTML slideshow styled to match the professional portfolio.",
+tools: "TensorFlow Neural Network Playground, HTML/CSS/JavaScript, course materials",
+valueProposition: "Demonstrates both conceptual understanding of neural network architecture and the ability to communicate that understanding visually and accessibly for technical and non-technical audiences.",
+uniqueValue: "Features a custom-built SVG architecture diagram and interactive slide navigation — not a generic template. Each component is explained with practical context and real-world relevance rather than textbook definitions.",
+relevance: "Neural networks are the foundation of modern AI systems. A clear understanding of how they are structured and trained is essential for anyone working in machine learning model development.",
+references: "IBM Technology Neural Networks video, 3blue1brown Neural Network series, Google ML Crash Course, TensorFlow Playground",
+link: process.env.PUBLIC_URL + "/artifacts/neural_networks.html",
+pdf: null
+},
+
 {
 title: "Generative AI Storytelling for Brand Development",
 artifactType: "PDF Document + Product Visual",
