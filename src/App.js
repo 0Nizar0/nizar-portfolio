@@ -114,6 +114,22 @@ pdf: null
 },
 
 {
+title: "Generative AI LLM Infrastructure: Training Process and Costs",
+artifactType: "Interactive HTML Infographic + Explanatory Document",
+introduction: "A visual breakdown of how large language models like GPT-4, Claude, Gemini, and LLaMA are trained — from raw data collection to deployment — and what it actually costs to get there.",
+description: "This infographic covers the full 7-step LLM training lifecycle, four resource cost categories (data, compute, energy, time) with real figures, a side-by-side comparison of GPT-4, Claude 3, Gemini Ultra, and LLaMA 2, an estimated training cost bar chart across model generations, and three key industry insights. An accompanying explanatory document summarizes the design rationale and sources.",
+objective: "To clearly illustrate the key steps involved in training generative AI LLMs, explain primary resource categories and their costs, and communicate complex infrastructure concepts visually for varied audiences.",
+process: "Researched training processes and cost data from public technical reports, official model documentation, and course materials. Designed and built an interactive HTML infographic matching the professional portfolio aesthetic, then compiled an explanatory Word document summarizing the content and design decisions.",
+tools: "HTML/CSS, course materials, OpenAI/Anthropic/Meta/Google technical reports",
+valueProposition: "Translates complex and often opaque LLM infrastructure information into a clear, visually accessible format — useful for developers, business stakeholders, and investors who need to understand what training frontier AI models actually involves and costs.",
+uniqueValue: "Combines real cost figures with visual comparison across four major models and a clear process flow — all in one artifact rather than scattered across multiple documents. The open vs. closed model distinction and the alignment cost dimension are often overlooked in surface-level treatments of this topic.",
+relevance: "Understanding the infrastructure and cost structure of LLM training is foundational for anyone making decisions about AI adoption, development, or investment. This artifact demonstrates both technical understanding and the ability to communicate it clearly.",
+references: "IBM Technologies LLM video, Wolfram ChatGPT article, GPT-4 Technical Report, LLaMA 2 paper, Anthropic Claude documentation, Gemini technical report",
+link: process.env.PUBLIC_URL + "/artifacts/llm_infrastructure.html",
+pdf: null
+},
+
+{
 title: "Generative AI Storytelling for Brand Development",
 artifactType: "PDF Document + Product Visual",
 introduction: "A project demonstrating how generative AI supports product branding, marketing storytelling, and advertisement development using a smartwatch example.",

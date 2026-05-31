@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Generative AI LLM Infrastructure | Nizar Muala</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(160deg, #1e1e1e 0%, #111 100%);
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  .navbar {
+    position: sticky; top: 0;
+    background-color: #111;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.7rem 2rem;
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  }
+  .nav-logo { font-weight: bold; font-size: 1.5rem; color: #00c8c8; }
+  .nav-back {
+    background: none; border: 1px solid #00c8c8;
+    color: #e0e0e0; font-size: 0.9rem; cursor: pointer;
+    padding: 0.45rem 0.9rem; border-radius: 6px;
+    transition: all 0.3s ease; text-decoration: none;
+  }
+  .nav-back:hover { background: #00c8c8; color: #111; transform: translateY(-2px); }
+
+  /* CONTAINER */
+  .container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 3rem; animation: fadeUp 0.6s ease both; }
+  .header-label { font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase; color: #00c8c8; margin-bottom: 0.8rem; }
+  .header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: #fff; margin-bottom: 0.6rem; line-height: 1.2; }
+  .header h1 span { color: #00c8c8; }
+  .header p { color: #888; font-size: 0.95rem; max-width: 580px; margin: 0 auto; line-height: 1.6; }
+  hr.div { border: 0; border-top: 1px solid #2a2a2a; margin: 1.2rem auto; width: 60px; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
+    color: #00c8c8; margin-bottom: 1.2rem; padding-left: 2px;
+  }
+
+  /* ── TRAINING PROCESS FLOW ── */
+  .process-section { margin-bottom: 3rem; animation: fadeUp 0.6s 0.1s ease both; }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .step {
+    background: #222;
+    border-radius: 10px;
+    padding: 1rem 0.7rem;
+    text-align: center;
+    position: relative;
+    border: 1px solid #2e2e2e;
+    transition: all 0.3s ease;
+    margin: 0 4px;
+  }
+  .step:hover { border-color: #00c8c8; transform: translateY(-3px); }
+
+  .step-num {
+    font-size: 0.65rem; letter-spacing: 2px; color: #00c8c8;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+  .step-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+  .step-title { font-size: 0.78rem; font-weight: 600; color: #e0e0e0; margin-bottom: 0.4rem; line-height: 1.2; }
+  .step-desc { font-size: 0.68rem; color: #777; line-height: 1.4; }
+
+  /* arrow between steps */
+  .step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00c8c8;
+    font-size: 1rem;
+    z-index: 2;
+    opacity: 0.6;
+  }
+
+  /* ── RESOURCE COSTS ── */
+  .costs-section { margin-bottom: 3rem; animation: fadeUp 0.6s 0.2s ease both; }
+
+  .costs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .cost-card {
+    background: #222;
+    border-radius: 10px;
+    padding: 1.4rem 1.1rem;
+    border: 1px solid #2e2e2e;
+    border-top: 3px solid;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+  .cost-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .cost-card.data   { border-top-color: #00c8c8; }
+  .cost-card.compute{ border-top-color: #c87840; }
+  .cost-card.energy { border-top-color: #50c878; }
+  .cost-card.time   { border-top-color: #7850c8; }
+
+  .cost-icon { font-size: 2rem; margin-bottom: 0.6rem; display: block; }
+  .cost-title { font-size: 0.95rem; font-weight: 600; color: #e0e0e0; margin-bottom: 0.4rem; }
+  .cost-stat {
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem;
+  }
+  .data   .cost-stat { color: #00c8c8; }
+  .compute .cost-stat { color: #e09050; }
+  .energy  .cost-stat { color: #50c878; }
+  .time    .cost-stat { color: #9070d8; }
+
+  .cost-sub { font-size: 0.72rem; color: #666; line-height: 1.4; }
+  .cost-details { margin-top: 0.8rem; }
+  .cost-detail-item {
+    font-size: 0.7rem; color: #888; padding: 3px 0;
+    border-bottom: 1px solid #2a2a2a;
+    text-align: left;
+  }
+  .cost-detail-item:last-child { border-bottom: none; }
+
+  /* ── MODEL COMPARISON ── */
+  .models-section { margin-bottom: 3rem; animation: fadeUp 0.6s 0.3s ease both; }
+
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .model-card {
+    background: #222;
+    border-radius: 10px;
+    padding: 1.3rem 1.1rem;
+    border: 1px solid #2e2e2e;
+    transition: all 0.3s ease;
+  }
+  .model-card:hover { transform: translateY(-3px); border-color: #00c8c8; }
+
+  .model-logo {
+    font-size: 1.8rem; margin-bottom: 0.5rem;
+  }
+  .model-name { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .model-maker { font-size: 0.72rem; color: #00c8c8; margin-bottom: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
+
+  .model-stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 0.72rem;
+  }
+  .model-stat-row:last-child { border-bottom: none; }
+  .stat-label { color: #666; }
+  .stat-val { color: #e0e0e0; font-weight: 500; text-align: right; }
+
+  .model-tag {
+    display: inline-block; font-size: 0.65rem; font-weight: 600;
+    padding: 2px 8px; border-radius: 20px; margin-top: 0.6rem;
+    background: rgba(0,200,200,0.1); color: #00c8c8;
+    border: 1px solid rgba(0,200,200,0.2);
+  }
+
+  /* ── COST BAR CHART ── */
+  .chart-section { margin-bottom: 3rem; animation: fadeUp 0.6s 0.35s ease both; }
+
+  .chart-card {
+    background: #222;
+    border-radius: 10px;
+    padding: 1.6rem;
+    border: 1px solid #2e2e2e;
+  }
+
+  .chart-title { font-size: 1rem; font-weight: 600; color: #e0e0e0; margin-bottom: 1.2rem; }
+
+  .bar-row { margin-bottom: 0.9rem; }
+  .bar-meta { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .bar-label { font-size: 0.78rem; color: #aaa; }
+  .bar-value { font-size: 0.78rem; color: #00c8c8; font-weight: 600; }
+  .bar-track { background: #1a1a1a; border-radius: 4px; height: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+  /* ── KEY INSIGHTS ── */
+  .insights-section { animation: fadeUp 0.6s 0.4s ease both; }
+
+  .insights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+  .insight-card {
+    background: #222; border-radius: 10px; padding: 1.2rem;
+    border: 1px solid #2e2e2e; transition: all 0.3s ease;
+    border-left: 3px solid #00c8c8;
+  }
+  .insight-card:hover { transform: translateY(-2px); }
+  .insight-title { font-size: 0.85rem; font-weight: 600; color: #00c8c8; margin-bottom: 0.4rem; }
+  .insight-text { font-size: 0.78rem; color: #888; line-height: 1.55; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 1.5rem; margin-top: 3rem;
+    border-top: 1px solid #2a2a2a; font-size: 0.82rem; color: #555;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+    .step:not(:last-child)::after { display: none; }
+    .costs-grid, .models-grid { grid-template-columns: repeat(2, 1fr); }
+    .insights-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .costs-grid, .models-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo">Nizar Muala</div>
+  <a href="https://0nizar0.github.io/nizar-portfolio/" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-label">Portfolio Artifact · AIML-501 · Workshop Three</div>
+    <h1>Generative AI LLM<br/><span>Infrastructure, Training Process & Costs</span></h1>
+    <hr class="div"/>
+    <p>A visual breakdown of how large language models like GPT-4, Claude, Gemini, and LLaMA are trained — from raw data collection to deployment — and what it actually costs to get there.</p>
+  </div>
+
+  <!-- TRAINING PROCESS -->
+  <div class="process-section">
+    <div class="section-label">01 — Training Process</div>
+    <div class="steps-grid">
+
+      <div class="step">
+        <div class="step-num">Step 1</div>
+        <span class="step-icon">🗄️</span>
+        <div class="step-title">Data Collection</div>
+        <div class="step-desc">Web crawl, books, code, academic papers, and licensed datasets. Trillions of tokens gathered from diverse sources.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 2</div>
+        <span class="step-icon">🧹</span>
+        <div class="step-title">Data Processing</div>
+        <div class="step-desc">Deduplication, quality filtering, toxicity removal, tokenization. Raw data becomes structured training tokens.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 3</div>
+        <span class="step-icon">🧠</span>
+        <div class="step-title">Pre-Training</div>
+        <div class="step-desc">Next-token prediction across the entire corpus. Thousands of GPUs running for months. The model learns language patterns at scale.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 4</div>
+        <span class="step-icon">🎯</span>
+        <div class="step-title">Fine-Tuning (SFT)</div>
+        <div class="step-desc">Supervised fine-tuning on curated instruction-response pairs. The model learns to follow instructions and behave as an assistant.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 5</div>
+        <span class="step-icon">👥</span>
+        <div class="step-title">RLHF</div>
+        <div class="step-desc">Human trainers rank model responses. A reward model is trained on those preferences and used to further align behavior.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 6</div>
+        <span class="step-icon">🛡️</span>
+        <div class="step-title">Safety & Alignment</div>
+        <div class="step-desc">Red-teaming, adversarial testing, guardrails, and policy alignment. Constitutional AI, RLAIF, and safety classifiers applied.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">Step 7</div>
+        <span class="step-icon">🚀</span>
+        <div class="step-title">Deployment</div>
+        <div class="step-desc">Model served via API infrastructure. Continuous monitoring, feedback collection, and retraining cycles begin.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESOURCE COSTS -->
+  <div class="costs-section">
+    <div class="section-label">02 — Resource Categories & Costs</div>
+    <div class="costs-grid">
+
+      <div class="cost-card data">
+        <span class="cost-icon">🗃️</span>
+        <div class="cost-title">Data</div>
+        <div class="cost-stat">~15TB+</div>
+        <div class="cost-sub">of processed training text per frontier model</div>
+        <div class="cost-details">
+          <div class="cost-detail-item">GPT-4: ~13T tokens estimated</div>
+          <div class="cost-detail-item">LLaMA 2: 2T tokens, curated</div>
+          <div class="cost-detail-item">Sources: web, books, code, papers</div>
+          <div class="cost-detail-item">Processing cost: $1M–$5M+</div>
+        </div>
+      </div>
+
+      <div class="cost-card compute">
+        <span class="cost-icon">⚙️</span>
+        <div class="cost-title">Compute</div>
+        <div class="cost-stat">25,000+</div>
+        <div class="cost-sub">A100/H100 GPUs for months at a time</div>
+        <div class="cost-details">
+          <div class="cost-detail-item">GPT-4: ~$50–100M compute cost</div>
+          <div class="cost-detail-item">LLaMA 2 70B: ~$20M estimated</div>
+          <div class="cost-detail-item">Gemini Ultra: TPU v4 pods, months</div>
+          <div class="cost-detail-item">H100 GPU: ~$30K each to purchase</div>
+        </div>
+      </div>
+
+      <div class="cost-card energy">
+        <span class="cost-icon">⚡</span>
+        <div class="cost-title">Energy</div>
+        <div class="cost-stat">1,000+ GWh</div>
+        <div class="cost-sub">estimated for a full frontier model training run</div>
+        <div class="cost-details">
+          <div class="cost-detail-item">GPT-3: ~1,287 MWh estimated</div>
+          <div class="cost-detail-item">Frontier models: 10–100x GPT-3</div>
+          <div class="cost-detail-item">Carbon footprint: 500+ tons CO₂</div>
+          <div class="cost-detail-item">Moving to renewable energy sources</div>
+        </div>
+      </div>
+
+      <div class="cost-card time">
+        <span class="cost-icon">⏱️</span>
+        <div class="cost-title">Time</div>
+        <div class="cost-stat">3–12 mo</div>
+        <div class="cost-sub">from data prep to final model deployment</div>
+        <div class="cost-details">
+          <div class="cost-detail-item">Data collection: 1–3 months</div>
+          <div class="cost-detail-item">Pre-training: 1–6 months</div>
+          <div class="cost-detail-item">Fine-tuning + RLHF: 1–3 months</div>
+          <div class="cost-detail-item">Safety eval + deploy: 1–2 months</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODEL COMPARISON -->
+  <div class="models-section">
+    <div class="section-label">03 — Model Comparison</div>
+    <div class="models-grid">
+
+      <div class="model-card">
+        <div class="model-logo">🟢</div>
+        <div class="model-name">GPT-4</div>
+        <div class="model-maker">OpenAI</div>
+        <div class="model-stat-row"><span class="stat-label">Parameters</span><span class="stat-val">~1.8T (MoE)*</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Tokens</span><span class="stat-val">~13T</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Cost</span><span class="stat-val">$50–100M+</span></div>
+        <div class="model-stat-row"><span class="stat-label">Hardware</span><span class="stat-val">A100 clusters</span></div>
+        <div class="model-stat-row"><span class="stat-label">Alignment</span><span class="stat-val">RLHF</span></div>
+        <span class="model-tag">Closed Source</span>
+      </div>
+
+      <div class="model-card">
+        <div class="model-logo">🟣</div>
+        <div class="model-name">Claude 3</div>
+        <div class="model-maker">Anthropic</div>
+        <div class="model-stat-row"><span class="stat-label">Parameters</span><span class="stat-val">Undisclosed</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Tokens</span><span class="stat-val">~Trillions</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Cost</span><span class="stat-val">$50–100M est.</span></div>
+        <div class="model-stat-row"><span class="stat-label">Hardware</span><span class="stat-val">AWS clusters</span></div>
+        <div class="model-stat-row"><span class="stat-label">Alignment</span><span class="stat-val">Constitutional AI</span></div>
+        <span class="model-tag">Closed Source</span>
+      </div>
+
+      <div class="model-card">
+        <div class="model-logo">🔵</div>
+        <div class="model-name">Gemini Ultra</div>
+        <div class="model-maker">Google DeepMind</div>
+        <div class="model-stat-row"><span class="stat-label">Parameters</span><span class="stat-val">Undisclosed</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Tokens</span><span class="stat-val">~Trillions</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Cost</span><span class="stat-val">$100M+ est.</span></div>
+        <div class="model-stat-row"><span class="stat-label">Hardware</span><span class="stat-val">TPU v4/v5 pods</span></div>
+        <div class="model-stat-row"><span class="stat-label">Alignment</span><span class="stat-val">RLHF + RLAIF</span></div>
+        <span class="model-tag">Closed Source</span>
+      </div>
+
+      <div class="model-card">
+        <div class="model-logo">🟡</div>
+        <div class="model-name">LLaMA 2 (70B)</div>
+        <div class="model-maker">Meta AI</div>
+        <div class="model-stat-row"><span class="stat-label">Parameters</span><span class="stat-val">70 Billion</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Tokens</span><span class="stat-val">2T</span></div>
+        <div class="model-stat-row"><span class="stat-label">Training Cost</span><span class="stat-val">~$20M est.</span></div>
+        <div class="model-stat-row"><span class="stat-label">Hardware</span><span class="stat-val">A100 80GB GPUs</span></div>
+        <div class="model-stat-row"><span class="stat-label">Alignment</span><span class="stat-val">RLHF</span></div>
+        <span class="model-tag" style="background:rgba(80,200,120,0.1);color:#50c878;border-color:rgba(80,200,120,0.2);">Open Source</span>
+      </div>
+
+    </div>
+    <p style="font-size:0.68rem;color:#555;margin-top:0.6rem;">* GPT-4 parameter count is unconfirmed. MoE = Mixture of Experts architecture. Cost estimates are based on available public reporting and may vary.</p>
+  </div>
+
+  <!-- COST BAR CHART -->
+  <div class="chart-section">
+    <div class="section-label">04 — Estimated Training Cost Comparison</div>
+    <div class="chart-card">
+      <div class="chart-title">Approximate Training Cost (USD) — Public Estimates</div>
+
+      <div class="bar-row">
+        <div class="bar-meta"><span class="bar-label">GPT-4 (OpenAI)</span><span class="bar-value">~$100M+</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#00868C,#00c8c8);"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span class="bar-label">Gemini Ultra (Google)</span><span class="bar-value">~$100M+</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:95%;background:linear-gradient(90deg,#2244aa,#4488ee);"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span class="bar-label">Claude 3 (Anthropic)</span><span class="bar-value">~$50–100M</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:75%;background:linear-gradient(90deg,#660088,#aa44cc);"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span class="bar-label">LLaMA 2 70B (Meta)</span><span class="bar-value">~$20M</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:22%;background:linear-gradient(90deg,#886600,#ccaa00);"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span class="bar-label">GPT-3 (OpenAI, 2020)</span><span class="bar-value">~$4.6M</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:6%;background:linear-gradient(90deg,#446644,#66aa66);"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY INSIGHTS -->
+  <div class="insights-section">
+    <div class="section-label">05 — Key Insights</div>
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="insight-title">Cost is Growing Exponentially</div>
+        <div class="insight-text">GPT-3 cost ~$4.6M to train in 2020. GPT-4 cost an estimated $50–100M+ in 2023. Each new generation requires dramatically more compute, data, and energy — a trend that shows no signs of slowing.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">Alignment is Non-Trivial</div>
+        <div class="insight-text">Pre-training produces a capable but unaligned model. RLHF, Constitutional AI, and safety red-teaming add significant time and cost on top of pre-training. Alignment is not a checkpoint — it's an ongoing process that continues after deployment.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-title">Open vs. Closed is a Real Trade-off</div>
+        <div class="insight-text">Meta's LLaMA 2 cost roughly one-fifth of GPT-4 to train and is publicly available, enabling broad research access. Closed models like GPT-4 keep training details proprietary, making independent auditing of their data, biases, and capabilities difficult.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div style="text-align:center; margin-top: 2.5rem;">
+    <button onclick="toggleRefs()" id="refBtn"
+      style="background:none; border:1px solid #333; color:#666; font-size:0.8rem;
+             padding:0.45rem 1.1rem; border-radius:6px; cursor:pointer;
+             font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+             transition: all 0.3s ease;"
+      onmouseover="this.style.borderColor='#00c8c8';this.style.color='#00c8c8';"
+      onmouseout="this.style.borderColor='#333';this.style.color='#666';">
+      📚 View References
+    </button>
+
+    <div id="refPanel" style="display:none; max-width:800px; margin:1.2rem auto 0;
+         background:#1a1a1a; border:1px solid #2a2a2a; border-radius:10px;
+         padding:1.4rem 1.8rem; text-align:left; animation: fadeUp 0.3s ease;">
+      <div style="font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;
+                  color:#00c8c8;margin-bottom:1rem;">References</div>
+      <div style="display:flex;flex-direction:column;gap:0.7rem;">
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          IBM Technologies. (2023, July 28). <em>How Large Language Models Work</em> [Video]. YouTube.
+          <a href="https://www.youtube.com/watch?v=5sLYAQS9sWQ" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://www.youtube.com/watch?v=5sLYAQS9sWQ</a>
+        </div>
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          Eye on Tech. (2023, April 4). <em>What is ChatGPT?</em> [Video]. YouTube.
+          <a href="https://www.youtube.com/watch?v=OGmDr8TLtTo" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://www.youtube.com/watch?v=OGmDr8TLtTo</a>
+        </div>
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          Wolfram, S. (2023, February 14). <em>What is ChatGPT doing and why does it work?</em>
+          <a href="https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/</a>
+        </div>
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          OpenAI. (2023). <em>GPT-4 technical report.</em>
+          <a href="https://arxiv.org/abs/2303.08774" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://arxiv.org/abs/2303.08774</a>
+        </div>
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          Touvron, H., et al. (2023). <em>Llama 2: Open foundation and fine-tuned chat models.</em> Meta AI.
+          <a href="https://arxiv.org/abs/2307.09288" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://arxiv.org/abs/2307.09288</a>
+        </div>
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          Google DeepMind. (2023). <em>Gemini: A family of highly capable multimodal models.</em>
+          <a href="https://arxiv.org/abs/2312.11805" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://arxiv.org/abs/2312.11805</a>
+        </div>
+
+        <div style="font-size:0.78rem;color:#888;line-height:1.55;padding-left:1.2rem;text-indent:-1.2rem;">
+          Strubell, E., Ganesh, A., & McCallum, A. (2019). <em>Energy and policy considerations for deep learning in NLP.</em> ACL.
+          <a href="https://arxiv.org/abs/1906.02629" target="_blank"
+             style="color:#00c8c8;text-decoration:none;">https://arxiv.org/abs/1906.02629</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Nizar Muala &nbsp;·&nbsp; AIML-501 Model Development &nbsp;·&nbsp; Indiana Wesleyan University</p>
+  </footer>
+
+</div>
+
+<script>
+  function toggleRefs() {
+    const panel = document.getElementById('refPanel');
+    const btn   = document.getElementById('refBtn');
+    const open  = panel.style.display === 'none';
+    panel.style.display = open ? 'block' : 'none';
+    btn.textContent = open ? '📚 Hide References' : '📚 View References';
+  }
+</script>
+
+</body>
+</html>
