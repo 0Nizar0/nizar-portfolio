@@ -129,6 +129,40 @@ link: process.env.PUBLIC_URL + "/artifacts/llm_infrastructure.html",
 pdf: null
 },
 
+/* ✅ AIML-501 Workshop 4 */
+{
+title: "Explainable AI: Transparency, Validation & Trust",
+artifactType: "Interactive HTML Infographic + Explanatory Document",
+introduction: "An infographic exploring Explainable AI (XAI) for large language models — why transparency matters in healthcare, finance, and law, the structural challenges that make LLMs hard to interpret, and how leading AI labs are addressing the problem.",
+description: "This infographic covers what XAI means and why it matters, four core explainability challenges (black box complexity, post-hoc explanation gaps, data quality and bias, regulatory pressure), a four-stage validation and performance metrics pipeline (benchmarks, red teaming, human evaluation, continuous monitoring), and a side-by-side look at how OpenAI, Anthropic, Google, and Meta are approaching explainability. An accompanying explanatory document expands on each section and outlines the design rationale.",
+objective: "To explain the key obstacles in interpreting generative AI outputs, describe industry techniques for improving explainability, and demonstrate how validation and performance metrics contribute to trustworthy AI — all communicated clearly for a non-technical audience.",
+process: "Researched explainability challenges and current industry approaches from lab documentation and course materials, then designed and built an interactive HTML infographic matching the professional portfolio aesthetic, followed by a written explanatory document covering the research and design choices.",
+tools: "HTML/CSS, course materials, OpenAI/Anthropic/Google/Meta documentation",
+valueProposition: "Demonstrates the ability to break down a nuanced, often technical AI safety topic into a format that non-technical stakeholders in regulated industries can understand and act on.",
+uniqueValue: "Frames explainability, validation, and documentation as complementary rather than competing solutions, and presents four different industry strategies side by side rather than focusing on a single approach.",
+relevance: "As AI systems take on more consequential roles in healthcare, finance, and law, the ability to communicate why these systems can or cannot be trusted is a critical skill for AI/ML professionals.",
+references: "OpenAI GPT-4 System Card, Anthropic interpretability research, Google Responsible AI documentation, Meta LLaMA model cards, course materials (AIML-501)",
+link: process.env.PUBLIC_URL + "/artifacts/explainability.html",
+pdf: null
+},
+
+/* ✅ AIML-501 Workshop 5 */
+{
+title: "Pre-Trained Model Decision Matrix",
+artifactType: "Interactive HTML Infographic + Explanatory Document",
+introduction: "A decision matrix comparing five pre-trained models — GPT-4, BERT-base, MobileNetV3, EfficientNet-B0, and XGBoost — across model size, accuracy, speed, and explainability considerations to guide model selection across NLP, computer vision, and tabular data domains.",
+description: "This artifact presents a color-coded comparison table covering NLP/generative AI, computer vision, and tabular data models, followed by domain-specific recommendations (GPT-4 vs. BERT-base, MobileNetV3 vs. EfficientNet-B0, and XGBoost as a tabular default). An accompanying explanatory document provides the methodology, detailed analysis, and recommendations behind the matrix.",
+objective: "To research and compare key characteristics of pre-trained models across domains, analyze trade-offs between size, accuracy, and speed, and present a clear decision matrix that supports informed model selection.",
+process: "Researched benchmark performance and architectural characteristics for five pre-trained models across three domains, compiled the findings into a color-coded decision matrix styled to match the professional portfolio, and wrote an explanatory document detailing methodology and analysis.",
+tools: "HTML/CSS, course materials, model benchmark documentation (ImageNet, GLUE, MMLU)",
+valueProposition: "Demonstrates the ability to translate raw model specifications into a practical decision-making tool, balancing technical performance against deployment constraints and explainability needs.",
+uniqueValue: "Goes beyond listing model specs by pairing each domain with a direct recommendation, framing model selection as a deliberate tradeoff rather than a default choice of the most powerful option.",
+relevance: "Selecting the right pre-trained model for a given constraint set — not just the most accurate one — is a core practical skill for AI/ML professionals working across NLP, vision, and structured data applications.",
+references: "ImageNet benchmark results, GLUE benchmark, MMLU benchmark, OpenAI/Google/Hugging Face model documentation, course materials (AIML-501)",
+link: process.env.PUBLIC_URL + "/artifacts/decision_matrix.html",
+pdf: null
+},
+
 {
 title: "Generative AI Storytelling for Brand Development",
 artifactType: "PDF Document + Product Visual",
@@ -202,7 +236,7 @@ return (
 <section id="home" className="section home">
 <img src={profilePhotoPath} alt="Nizar Muala" className="profile-photo" onError={e => e.target.style.display = 'none'} />
 <h1>Nizar Muala</h1>
-<h2>Web Developer | Master’s in Computer Information Systems (AI Specialization – In Progress)</h2>
+<h2>Business Web Applications Developer | Master’s in Computer Information Systems (AI Specialization – In Progress)</h2>
 </section>
 
 <hr className="divider"/>
@@ -220,11 +254,14 @@ Talented Software Engineer with 3+ years of experience building robust applicati
 <h2>Experience</h2>
 
 <div className="experience-item">
-<h3>Web Developer – Internal Systems (Whitestar Distributors Inc.)</h3>
+<h3>Business Web Applications Developer (Whitestar Distributors Inc.)</h3>
 <span>08/2025 - Present | Glendale, AZ</span>
 <ul>
-<li>Developed and maintained internal web applications using Java, Spring Boot, React, HTML/CSS.</li>
-<li>Assisted with database tasks and SQL queries, contributed to version control and deployment.</li>
+<li>Develop and maintain internal web-based applications supporting core business operations such as inventory tracking, sales management, and multi-branch coordination.</li>
+<li>Build and enhance user interfaces for internal tools using React and modern front-end technologies.</li>
+<li>Develop and implement RESTful APIs to support internal web application functionality.</li>
+<li>Work with relational databases (MySQL, PostgreSQL) for data storage, retrieval, and reporting.</li>
+<li>Use Git for version control in a collaborative development environment, and perform functional testing prior to deployment.</li>
 </ul>
 </div>
 
